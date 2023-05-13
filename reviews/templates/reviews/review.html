@@ -1,0 +1,22 @@
+<html lang="en">
+
+<head>
+  	<meta charset="utf-8">
+  	<title>Your Review</title>
+  	<meta name="author" content="">
+  	<meta name="description" content="">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  	<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  	<form actions="/" method="POST">
+        {% csrf_token %}
+        <label for="username">Your Name</label>
+        <input type="text" name="username" id="username">
+        <button type="submit">Send</button>
+    </form>
+</body>
+  
+</html>
