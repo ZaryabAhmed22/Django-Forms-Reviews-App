@@ -1,4 +1,5 @@
 <html lang="en">
+{% load static %}
 
 <head>
   	<meta charset="utf-8">
@@ -7,7 +8,7 @@
   	<meta name="description" content="">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  	<link href="css/style.css" rel="stylesheet">
+  	<link href="{% static 'reviews/styles.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -15,9 +16,11 @@
         {% csrf_token %}
         {% comment %} <label for="username">Your Name</label>
         <input type="text" name="username" id="username"> {% endcomment %}
-        {{form.user_name.label_tag}}
-        {{form.user_name}}
-        {{form.user_name.errors}}
+        <div class="form-control">
+            {{form.user_name.label_tag}}
+            {{form.user_name}}
+            {{form.user_name.errors}}
+        </div>
         <button type="submit">Send</button>
     </form>
 </body>
