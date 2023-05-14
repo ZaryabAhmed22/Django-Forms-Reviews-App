@@ -15,7 +15,9 @@
         {% csrf_token %}
         {% comment %} <label for="username">Your Name</label>
         <input type="text" name="username" id="username"> {% endcomment %}
-        {{form}}
+        {{form.user_name.label_tag}}
+        {{form.user_name}}
+        {{form.user_name.errors}}
         <button type="submit">Send</button>
     </form>
 </body>
