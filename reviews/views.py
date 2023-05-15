@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import ReviewForm
+from .forms import ReviewForm, ComplainForm
 from .models import Review
 # Create your views here.
 
@@ -26,6 +26,19 @@ def review(request):
         form = ReviewForm()
 
     return render(request, "reviews/review.html", {"form": form})
+
+
+def complain(request):
+    if request.method == "POST":
+        form = ComplainForm(request.POST)
+
+        if form.is_valid():
+            form.save()  # saving data in a model form
+            print(form.cleaned_data)
+            return HttpResponseRedirect("/thank-you")
+    else:
+        form = ComplainForm()
+    return render(request, "reviews/complain.html", {"form": form})
 
 
 def thankyou(request):

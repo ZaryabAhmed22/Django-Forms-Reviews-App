@@ -1,0 +1,27 @@
+<html lang="en">
+{% load static %}
+
+<head>
+  	<meta charset="utf-8">
+  	<title>Your Review</title>
+  	<meta name="author" content="">
+  	<meta name="description" content="">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  	<link href="{% static 'reviews/styles.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  	<form actions="/" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-control {% if field.errors%}errors{% endif %}">
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+        </div>{% endfor %}
+        <button type="submit">Send</button>
+    </form>
+</body>
+  
+</html>
