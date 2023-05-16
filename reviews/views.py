@@ -1,7 +1,10 @@
+from typing import Any, Dict
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import ReviewForm, ComplainForm
 from .models import Review
+from django.views import View
+from django.views.generic.base import TemplateView
 # Create your views here.
 
 
@@ -43,3 +46,57 @@ def complain(request):
 
 def thankyou(request):
     return render(request, "reviews/thankyou.html")
+
+# >> CLASS BASED VIEWS
+
+
+class ThankyouView(View):  # >> Simple Class Based View for Thankyou page
+    def get(self, request):
+        return render(request, "reviews/thankyou.html")
+
+# >> TemplateView || This is used when the main purpose of a view is to render a template
+
+
+class ThanyouTemplateView(TemplateView):
+    # this is a built in variable name "template_name"
+    template_name = 'reviews/thankyou.html'
+
+    # To pass any kind of context data we use get_context_data function
+    def get_context_data(self, **kwargs):
+
+        # Callind the super method os that the built in get_context_data is called with the passed data, this code creates a new empty context dictionary
+        context = super().get_context_data(**kwargs)
+
+        # Adding new key/value to the context dict
+        context["message"] = "Your review has been successfully been submitted"
+
+        # Returning the context dict
+        return context
+
+
+class ReviewsListView(TemplateView):
+    template_name = "reviews/review_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        reviews = Review.objects.all()
+
+        context["reviews"] = reviews
+
+        return context
+
+
+class RevieDetailView(TemplateView):
+    template_name = "reviews/review_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        review_id = kwargs["id"]
+
+        selected_review = Review.objects.get(pk=review_id)
+
+        context["review"] = selected_review
+
+        return context
