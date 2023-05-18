@@ -3,6 +3,7 @@ from django.views import View
 from django.http import HttpResponseRedirect
 from .forms import FileForm
 from .models import UserProfile
+from django.views.generic.edit import CreateView
 
 # Helper functions
 
@@ -14,6 +15,10 @@ def store_file(file):
             dest.write(chunk)
 
 # Create your views here.
+
+
+class CreateProfileCreateView(CreateView):
+    pass
 
 
 class CreateProfileView(View):
