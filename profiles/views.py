@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
 from .forms import FileForm
+from .models import UserProfile
 
 # Helper functions
 
@@ -21,12 +22,14 @@ class CreateProfileView(View):
         return render(request, "profiles/create_profile.html", {"form": form})
 
     def post(self, request):
-        submitted_form = FileForm(request.FILES, request.POST)
+        submitted_form = FileForm(request.POST, request.FILES)
 
         if submitted_form.is_valid():
-            store_file(request.FILES["image"])
+            # store_file(request.FILES["image"])
             # Since request.POST only contains none file data of a form, the data containing any kinf of files can be accesses using request.FILES["name_of_input"]
-            print(request.FILES["image"])
+            print(request.FILES["user_image"])
+            profile = UserProfile(image=request.FILES["user_image"])
+            profile.save()
             return HttpResponseRedirect("/profiles")
 
         return render(request, "profiles/create_profile.html", {"form": submitted_form})
