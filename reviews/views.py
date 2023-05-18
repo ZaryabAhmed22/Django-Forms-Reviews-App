@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import ReviewForm, ComplainForm
-from .models import Review
+from .models import Review, Complain
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 # Create your views here.
 
 
@@ -49,6 +49,16 @@ def thankyou(request):
     return render(request, "reviews/thankyou.html")
 
 # >> CLASS BASED VIEWS
+
+
+class ComplainCreateView(CreateView):
+    model = Complain
+
+    form_class = ReviewForm
+
+    template_name = "reviews/review.html"
+
+    success_url = "/thank-you"
 
 
 class ReviewView(FormView):
