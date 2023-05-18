@@ -1,10 +1,10 @@
-from typing import Any, Dict
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import ReviewForm, ComplainForm
 from .models import Review
 from django.views import View
 from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 # Create your views here.
 
 
@@ -74,7 +74,7 @@ class ThanyouTemplateView(TemplateView):
         return context
 
 
-class ReviewsListView(TemplateView):
+class ReviewsListTemplateView(TemplateView):
     template_name = "reviews/review_list.html"
 
     def get_context_data(self, **kwargs):
@@ -86,8 +86,28 @@ class ReviewsListView(TemplateView):
 
         return context
 
+# >> ListView
 
-class RevieDetailView(TemplateView):
+
+class ReviewListListView(ListView):
+    template_name = "reviews/review_list.html"
+
+    model = Review
+
+    context_object_name = "reviews"
+
+    def get_queryset(self):
+        # Setting up the base query on which we can use all the model querying methods
+        base_query = super().get_queryset()
+
+        # filtering reviews
+        data = base_query.filter(rating=4)
+        print(data)
+
+        return data
+
+
+class ReviewDetailView(TemplateView):
     template_name = "reviews/review_detail.html"
 
     def get_context_data(self, **kwargs):

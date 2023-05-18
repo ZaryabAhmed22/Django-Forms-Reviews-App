@@ -7,7 +7,7 @@
 <ul>
     {% for review in reviews %}
     <li>
-        <a href="">{{review.user_name}} (Rating: {{review.rating}})</a>
+        <a href="{% url 'review-detail' review.id %}">{{review.user_name}} (Rating: {{review.rating}})</a>
     </li>
     {% endfor %}
 </ul>
