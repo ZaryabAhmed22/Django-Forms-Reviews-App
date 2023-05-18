@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views
 urlpatterns = [
-    path("", views.review),
+    path("", views.ReviewView.as_view()),
     path("complain/", views.complain),
     path("thank-you/", views.ThanyouTemplateView.as_view()),
     path("reviews/", views.ReviewListListView.as_view()),
-    path("reviews/<int:id>/",
-         views.ReviewDetailView.as_view(), name="review-detail")
+    path("reviews/<int:pk>/",
+         views.ReviewDetailDetailView.as_view(), name="review-detail")
 ]

@@ -4,7 +4,8 @@ from .forms import ReviewForm, ComplainForm
 from .models import Review
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormView
 # Create your views here.
 
 
@@ -48,6 +49,34 @@ def thankyou(request):
     return render(request, "reviews/thankyou.html")
 
 # >> CLASS BASED VIEWS
+
+
+class ReviewView(FormView):
+    # To make use of FormView, we have to do 4 basic steps;
+    # i) declare the form class that we have to render
+    # ii) Declare the template where we have to render the form
+    # iii) Declare the success url where you want to redirect after successful form submission
+    # iv) THIS IS ONLY APPLICABLE FOR MODELFORMS >> Declare a method form_valid,which gets the valid form, call the .save() methos on it to save the data to the model.
+    # FOR SIMPLE FORM >> We will manuallt create a review instance and save it to the database
+    # >> By default the FormView will call the get request and render the form so we don't need any get() method. And to post the data we are using the form_valid method
+
+    form_class = ReviewForm
+
+    model = Review
+
+    template_name = "reviews/review.html"
+
+    success_url = "/thank-you"
+
+    def form_valid(self, form):
+        # Creating form data
+        user_name = form.cleaned_data["user_name"]
+        review_text = form.cleaned_data["review_text"]
+        rating = form.cleaned_data["rating"]
+        review = Review(user_name=user_name,
+                        review_text=review_text, rating=rating)
+        review.save()
+        return super().form_valid(form)
 
 
 class ThankyouView(View):  # >> Simple Class Based View for Thankyou page
@@ -101,7 +130,7 @@ class ReviewListListView(ListView):
         base_query = super().get_queryset()
 
         # filtering reviews
-        data = base_query.filter(rating=4)
+        data = base_query.filter(rating__gte=4)
         print(data)
 
         return data
@@ -120,3 +149,16 @@ class ReviewDetailView(TemplateView):
         context["review"] = selected_review
 
         return context
+
+
+# >> Detail View
+
+
+class ReviewDetailDetailView(DetailView):
+    # To make use of detail view, we have to do 2 things in each case;
+    # i) define template name
+    # ii) define the Model name that has the data
+    # >> Now the Django will automatically dedect the model name and in the template, you can use the context data using the name of the model in lowercase like, "review", or you can use the name "object"
+    template_name = "reviews/review_detail.html"
+
+    model = Review
