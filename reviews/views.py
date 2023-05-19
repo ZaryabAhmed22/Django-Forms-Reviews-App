@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -173,6 +174,21 @@ class ReviewDetailDetailView(DetailView):
     template_name = "reviews/review_detail.html"
 
     model = Review
+
+    # >> Using the review id stored in the session
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        # >> We have to get access of the recent rendered object and the request, to do this
+        loaded_review = self.object
+        request = self.request
+
+        favourite_id = request.session["favourite_review"]
+
+        # >> Checking if the rendered object is favorite or not
+        context["is_favourite"] = str(loaded_review.id) == favourite_id
+
+        return context
 
 # >> View for sessions and cookies
 
