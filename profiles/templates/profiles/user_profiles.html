@@ -9,13 +9,16 @@
   <link rel="stylesheet" href="{% static "profiles/styles.css" %}">
 </head>
 <body>
-  <button><a href="{% url 'image-list' %}">See All Images</a></button>
-  <form action="/profiles/" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% comment %} <input type="file" name="image"/> {% endcomment %}
-    {{form}}
-    <button>Upload!</button>
-  </form>
-  
+<div class="profile-container">
+    <ul class="profile-list">
+        {% for profile in profiles %}
+        <li>
+            <img width="100px" src="{{profile.image.url}}">
+            <p>User Name</p>
+        </li>
+        {% endfor %}
+     </ul>
+</div>
+ 
 </body>
 </html>
