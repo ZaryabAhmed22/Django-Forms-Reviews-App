@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .forms import ReviewForm, ComplainForm
 from .models import Review, Complain
@@ -172,3 +173,23 @@ class ReviewDetailDetailView(DetailView):
     template_name = "reviews/review_detail.html"
 
     model = Review
+
+# >> View for sessions and cookies
+
+
+class AddFavouriteView(View):
+    def post(self, request):
+        # getting the data from hidden input field
+        review_id = request.POST["review_id"]
+
+        # >> this will not work since we cannot store objects in sessoin
+        # using that data to search required review
+        # fav_review = Review.objects.get(pk=review_id)
+
+        # storing data to a session
+        # request.session["favourite_review"] = fav_review
+
+        # Storing object id in session instead whole object since object can't be converted to JSON since it may contain methods
+        request.session["favourite_review"] = review_id
+
+        return HttpResponseRedirect(reverse('review-detail', args=[review_id]))
